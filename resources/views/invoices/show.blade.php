@@ -5,7 +5,7 @@
     <style>
         @media print {
             *{
-                font-size: 13pt; /* changing to 10pt has no impact */
+                font-size: 14pt; /* changing to 10pt has no impact */
             }
 
              /* html, body {
