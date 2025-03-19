@@ -133,7 +133,7 @@
                             @php
                                 $particulars = json_decode($invoice->particulars, true);
                                 $count = 1;
-                                $totalRows = 13;
+                                $totalRows = 12;
                                 $dataCount = count($particulars);
                             @endphp
                             @if (!empty($particulars))
