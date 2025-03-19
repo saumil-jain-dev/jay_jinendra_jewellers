@@ -140,7 +140,7 @@
                                 @foreach ($particulars as $index => $particular)
                                     @if ($count > $totalRows) @break @endif
                                     <tr>
-                                        <td style="border-left: 1px solid #000; border-right: 1px solid #000; text-align: center; padding: 5px;">
+                                        <td style="border-left: 1px solid #000; border-right: 1px solid #000; text-align: center; padding: 4px;">
                                             {{ $count }}
                                         </td>
                                         <td style="border-left: 1px solid #000; border-right: 1px solid #000; text-align: center; padding: 5px;" contenteditable="true">
@@ -164,7 +164,7 @@
                                         <td style="border-left: 1px solid #000; border-right: 1px solid #000; text-align: center; padding: 5px;" contenteditable="true">
                                             {{ $particular['qty'] ?? 'N/A' }}
                                         </td>
-                                        <td style="border-left: 1px solid #000; border-right: 1px solid #000; text-align: center; padding: 5px;" contenteditable="true">
+                                        <td style="border-left: 1px solid #000; border-right: 1px solid #000; text-align: center; padding: 6px;" contenteditable="true">
                                             @if(isset($particular['gold_labour']) && $particular['gold_labour'] !== null)
                                                 {{ $particular['gold_labour'] . '%' }}
                                             @elseif(isset($particular['silver_labour']) && $particular['silver_labour'] !== null)
