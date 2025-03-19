@@ -84,7 +84,7 @@
                             </div>
 
                             <div style="display: flex; gap: 15px; margin-top: 10px; align-items: center;">
-                                <strong>GST No:</strong>
+                                <strong>GST:</strong>
                                 <div style="border-bottom: 1px solid #000; width: 37%; position: relative;">
                                     <input type="text"
                                         style="border: none; outline: none; width: 100%; background: transparent;  padding: 0; margin: 0;"
