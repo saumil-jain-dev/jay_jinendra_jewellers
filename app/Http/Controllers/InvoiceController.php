@@ -126,8 +126,4 @@ class InvoiceController extends Controller
             'data' => $response,
         ]);
     }
-
-    public function printInvoice($id) {
-
-    }
 }
