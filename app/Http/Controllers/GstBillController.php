@@ -69,9 +69,16 @@ class GstBillController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
         //
+        $invoice = GstBill::find($id);
+        $this->data['pageTitle'] = "Jjj | Invoice";
+        $this->data['users'] = Party::all();
+        $this->data['guarantors'] = Guarantor::all();
+        $this->data['guarantors'] = Guarantor::all();
+        $this->data['invoice'] = $invoice;
+        return view('gst_invoice.edit', $this->data);
     }
 
     /**
@@ -80,6 +87,17 @@ class GstBillController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $invoice = GstBill::find($id);
+        $data = $request->except('totalAmounts','_token','customer-name','data');
+        $data['particulars'] = json_encode($request->data);
+        $data['total_given_amount'] = $request->given_amount;
+        $data['total_due_amount'] = $request->pending_amount;
+
+        $invoice->update($data);
+
+        session()->flash('message', 'Invoice updated successfully!');
+        session()->flash('alert-type', 'success');
+        return redirect()->route('gst-bill.index');
     }
 
     /**

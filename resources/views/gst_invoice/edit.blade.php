@@ -19,7 +19,7 @@
 <section class="admin-content">
     <!-- BEGIN PlACE PAGE CONTENT HERE -->
     <div class="container-fluid">
-        <form method="POST" id="bill_create" action="{{ route('invoices.update',$invoice->id) }}">
+        <form method="POST" id="bill_create" action="{{ route('gst-bill.update',$invoice->id) }}">
             @csrf
             @method('PUT')
             <div class="card my-3">
@@ -91,8 +91,8 @@
 
                             <div style="width: 30%;  line-height: 1.5;">
                                 <div style="border: 1px solid #000; border-left: none; border-radius: 8px; padding: 10px;">
-                                    <div ><strong>No:</strong> {{ $invoice->bill_number }}</div>
-                                    <input type="hidden" name="bill_number" value="{{ $invoice->bill_number }}"/>
+                                    <div ><strong>No:</strong> <input type="text" name="bill_number" value="{{ $invoice->bill_number }}"/></div>
+                                    
                                     <div><strong>Date:</strong></div><br>
                                     <input type="date" name="bill_date"  id="date" value="{{ $invoice->bill_date }}" />
 
