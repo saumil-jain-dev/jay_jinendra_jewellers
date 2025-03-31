@@ -168,8 +168,8 @@
             </li>
             <!--list item ends-->
             <!--list item begins-->
-            {{-- <li class="menu-item">
-                <a href="black-list" class="menu-link">
+            {{-- <li class="menu-item @if(Route::is('online-payment.*')) active @endif">
+                <a href="{{ route('online-payment.index') }}" class="menu-link">
                     <span class="menu-label">
                         <span class="menu-name">Online Transection</span>
                     </span>

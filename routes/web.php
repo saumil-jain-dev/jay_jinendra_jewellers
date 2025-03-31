@@ -53,5 +53,5 @@ Route::middleware( ['auth'])->group(callback: function () {
     Route::post('get-invoice-details',[BillingHistoryController::class,'getUserInvoice'])->name('users.check-invoice');
     Route::post('get-payment-history',[PartyController::class,'getPaymentHistory'])->name('parties.payment-history');
 
-    Route::get('online-payment', [DashboardController::class, 'onlinePayment'])->name('online-payment');
+    Route::get('online-payment', [DashboardController::class, 'onlinePayment'])->name('online-payment.index');
 });
