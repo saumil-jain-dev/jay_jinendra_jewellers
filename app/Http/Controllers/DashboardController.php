@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Bill;
 use App\Models\BillingHistory;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PaymentsExport;
 
 class DashboardController extends Controller
 {
@@ -42,5 +44,11 @@ class DashboardController extends Controller
         $mergedTransactions = $invoicesHistory->merge($invoices)->sortByDesc('date')->values();
         $pageTitle = "Jjj | Invoice";
         return view('billing_histories.online-payment', compact('invoices','pageTitle','mergedTransactions'));
+    }
+
+    public function exportPayments(Request $request)
+    {
+        
+        return Excel::download(new PaymentsExport(), 'payments_report.xlsx');
     }
 }

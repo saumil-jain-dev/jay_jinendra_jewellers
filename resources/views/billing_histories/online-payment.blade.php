@@ -11,6 +11,9 @@
                     <div class="col-lg-6 col-md-6 col-sm-12 p-t-40 p-b-90">
                         <div class="row align-items-end justify-content-end">
                             <div class="col-lg-6 col-md-4 col-sm-12">
+                                <button class="btn m-b-15 ml-2 mr-2 btn-dark w-75" id="downloadExcel">
+                                    Download Report
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -28,20 +31,28 @@
                                     <thead>
                                         <tr>
                                             <th>Sr.No</th>
+                                            <th>Date</th>
                                             <th>Invoice No</th>
                                             <th>Customer Name</th>
                                             <th>Total Amount</th>
-                                            <th>Date</th>
+                                            <th>Remark</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($mergedTransactions as $key => $invoice)
                                             <tr>
                                                 <td>{{ $key + 1 }}</td>
+                                                <td>{{ $invoice['date'] }}</td>
                                                 <td>{{ $invoice['invoice_number'] }}</td>
                                                 <td>{{ $invoice['party'] }}</td>
                                                 <td>{{ $invoice['amount'] }}</td>
-                                                <td>{{ $invoice['date'] }}</td>
+                                                <td>
+                                                    @if($invoice['source'] == "bills")
+                                                        Received at Billing Time
+                                                    @else
+                                                        Received installment from customer
+                                                    @endif
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -62,44 +73,13 @@
             </div>
         </div>
     </section>
-
-
-
-    <!-- Delete Confirmation Modal -->
-    <div class="modal fade category-delete-conformation" id="deleteModal" tabindex="-1" role="dialog"
-        aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="mySmallModalLabel">Confirmation</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p id="deleteConfirmationMessage">Are you sure you want to delete?</p>
-                </div>
-                <div class="modal-footer">
-                    <form id="deleteForm" method="POST" action="" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
-                    </form>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Delete Confirmation Modal -->
 @endsection
 @section('scripts')
     <script type="text/javascript">
-        $('#deleteModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var invoiceId = button.data('id'); // Extract user ID from data-* attributes
-
-            var formAction = site_url + '/invoices/' + invoiceId; // Construct the form action URL
-            $(this).find('#deleteForm').attr('action', formAction); // Set the action attribute
+        $(document).ready(function() {
+        $('#downloadExcel').click(function() {
+            window.location.href = "{{ route('payments.export') }}";
         });
+    });
     </script>
 @endsection
