@@ -22,22 +22,22 @@ class PaymentsExport implements FromCollection, WithHeadings, WithColumnFormatti
         $invoices = Bill::with('party')->whereNotNull('online_amount')->where('online_amount', '!=', 0)->get();
         $invoicesHistory = $invoicesHistory->map(function ($history) {
             return [
-                'id' => $history->id,
+                
+                'date' => $history->created_at->format('d-m-Y'), // Formatting date
                 'invoice_number' => $history->invoice_id,
                 'party' => optional($history->invoice)->party->name, // Handling relations safely
                 'amount' => $history->amount,
-                'date' => $history->created_at->format('d-m-Y'), // Formatting date
                 'remark' => 'Received installment from customer' // Identifying source
             ];
         });
 
         $invoices = $invoices->map(function ($bill) {
             return [
-                'id' => $bill->id,
+                
+                'date' => $bill->created_at->format('d-m-Y'), // Formatting date
                 'invoice_number' => $bill->bill_number,
                 'party' => $bill->party->name,
                 'amount' => $bill->online_amount,
-                'date' => $bill->created_at->format('d-m-Y'), // Formatting date
                 'remark' => 'Received at Billing Time' // Identifying source
             ];
         });
@@ -53,7 +53,6 @@ class PaymentsExport implements FromCollection, WithHeadings, WithColumnFormatti
     public function headings(): array
     {
         return [
-            'Sr.No',
             'Date',
             'Invoice No',
             'Customer Name',
@@ -70,8 +69,8 @@ class PaymentsExport implements FromCollection, WithHeadings, WithColumnFormatti
     public function columnFormats(): array
     {
         return [
-            'B' => 'dd-mm-yyyy', // Format date in column B
-            'E' => '#,##0.00',    // Format amount in column E
+            'A' => 'dd-mm-yyyy', // Format date in column B
+            'D' => '#,##0.00',    // Format amount in column E
         ];
     }
 
