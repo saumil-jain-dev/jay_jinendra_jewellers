@@ -6,7 +6,7 @@
             <div class="container-fluid m-b-30">
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-12 text-white p-t-40 p-b-90">
-                        <h4>Invoice List</h4>
+                        <h4>Online Payment List</h4>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12 p-t-40 p-b-90">
                         <div class="row align-items-end justify-content-end">
@@ -31,39 +31,17 @@
                                             <th>Invoice No</th>
                                             <th>Customer Name</th>
                                             <th>Total Amount</th>
-                                            <th>Paid Amount</th>
-                                            <th>Remaining Amount</th>
-                                            <th>Actions</th>
+                                            <th>Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($invoices as $key => $invoice)
+                                        @foreach ($mergedTransactions as $key => $invoice)
                                             <tr>
                                                 <td>{{ $key + 1 }}</td>
-                                                <td>{{ $invoice->bill_number }}</td>
-                                                <td>{{ $invoice->party_name }}</td>
-                                                <td>{{ $invoice->final_amount }}</td>
-                                                <td>{{ $invoice->total_given_amount }}</td>
-                                                <td>{{ $invoice->total_due_amount }}</td>
-                                                <td>
-                                                    <div class="btn-group">
-                                                        <a href="{{ route('invoices.edit', $invoice->id) }}"
-                                                            class="btn btn-sm ml-2 mr-2 p-1 pr-2 pl-2 btn-primary">
-                                                            <i class="mdi mdi-pen"></i>
-                                                        </a>
-                                                        <a class="btn btn-sm ml-2 mr-2 p-1 pr-2 pl-2 btn-primary"
-                                                            href="{{ route('invoices.show', $invoice->id) }}"
-                                                            data-id="{{ $invoice->id }}" title="View Invoce">
-                                                            <i class="mdi mdi-eye"></i>
-                                                        </a>
-                                                        <button type="button"
-                                                            class="btn btn-sm ml-2 mr-2 p-1 pr-2 pl-2 btn-dark"
-                                                            data-toggle="modal" data-target="#deleteModal"
-                                                            data-id="{{ $invoice->id }}">
-                                                            <i class="mdi mdi-delete-forever"></i>
-                                                        </button>
-                                                    </div>
-                                                </td>
+                                                <td>{{ $invoice['invoice_number'] }}</td>
+                                                <td>{{ $invoice['party'] }}</td>
+                                                <td>{{ $invoice['amount'] }}</td>
+                                                <td>{{ $invoice['date'] }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -73,9 +51,7 @@
                                             <th>Invoice No</th>
                                             <th>Customer Name</th>
                                             <th>Total Amount</th>
-                                            <th>Paid Amount</th>
-                                            <th>Remaining Amount</th>
-                                            <th>Actions</th>
+                                            <th>Date</th>
                                         </tr>
                                     </tfoot>
                                 </table>

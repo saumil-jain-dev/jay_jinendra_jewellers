@@ -24,7 +24,7 @@ class DashboardController extends Controller
                 'invoice_number' => $history->invoice_id,
                 'party' => optional($history->invoice)->party->name, // Handling relations safely
                 'amount' => $history->amount,
-                'date' => $history->created_at->format('Y-m-d'), // Formatting date
+                'date' => $history->created_at->format('d-m-Y'), // Formatting date
                 'source' => 'billing_history' // Identifying source
             ];
         });
@@ -35,13 +35,12 @@ class DashboardController extends Controller
                 'invoice_number' => $bill->bill_number,
                 'party' => $bill->party->name,
                 'amount' => $bill->online_amount,
-                'date' => $bill->created_at->format('Y-m-d'),
+                'date' => $bill->created_at->format('d-m-Y'), // Formatting date
                 'source' => 'bills' // Identifying source
             ];
         });
         $mergedTransactions = $invoicesHistory->merge($invoices)->sortByDesc('date')->values();
-        dd($mergedTransactions);
         $pageTitle = "Jjj | Invoice";
-        return view('billing_histories.online-payment', compact('invoices','pageTitle'));
+        return view('billing_histories.online-payment', compact('invoices','pageTitle','mergedTransactions'));
     }
 }

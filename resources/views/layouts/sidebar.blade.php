@@ -168,7 +168,7 @@
             </li>
             <!--list item ends-->
             <!--list item begins-->
-            {{-- <li class="menu-item @if(Route::is('online-payment.*')) active @endif">
+            <li class="menu-item @if(Route::is('online-payment.*')) active @endif">
                 <a href="{{ route('online-payment.index') }}" class="menu-link">
                     <span class="menu-label">
                         <span class="menu-name">Online Transection</span>
@@ -177,7 +177,7 @@
                         <i class="icon-placeholder mdi mdi-playlist-check"></i>
                     </span>
                 </a>
-            </li> --}}
+            </li>
             <!--list item ends-->
         </ul>
         <!-- Menu List Ends-->
