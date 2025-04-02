@@ -15,30 +15,64 @@ class PaymentsExport implements FromCollection, WithHeadings, WithColumnFormatti
     /**
     * @return \Illuminate\Support\Collection
     */
+    protected $request;
+    public function __construct($request)
+    {
+        $this->request = $request;
+    }
+    /**
+     * Fetch the data for the Excel export
+     *
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         //
-        $invoicesHistory = BillingHistory::with('invoice','invoice.party')->where('payment_type', 'online')->whereNull('deleted_at')->get();
-        $invoices = Bill::with('party')->whereNotNull('online_amount')->where('online_amount', '!=', 0)->get();
+        $dateRange = $this->request->input('date_range');
+        if (!empty($dateRange) && is_array($dateRange)) {
+            $dates = explode(' - ', $dateRange[0]); 
+            $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]))->format('Y-m-d');
+            $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]))->format('Y-m-d');
+            
+            $startDateTime = $startDate . ' 00:00:00';
+            $endDateTime = $endDate . ' 23:59:59';
+        }
+
+        $invoicesHistory = BillingHistory::with('invoice', 'invoice.party')
+        ->where('payment_type', 'online')
+        ->when(!empty($dateRange), function ($query) use ($startDateTime, $endDateTime) {
+            return $query->whereBetween('created_at', [$startDateTime, $endDateTime]);
+        })
+        ->whereNull('deleted_at')
+        ->get();
+
+        $invoices = Bill::with('party')
+        ->whereNotNull('online_amount')
+        ->where('online_amount', '!=', 0)
+        ->when(!empty($dateRange), function ($query) use ($startDateTime, $endDateTime) {
+            return $query->whereBetween('created_at', [$startDateTime, $endDateTime]);
+        })
+        ->get();
+        
         $invoicesHistory = $invoicesHistory->map(function ($history) {
             return [
                 
-                'date' => $history->created_at->format('d-m-Y'), // Formatting date
+                'date' => $history->created_at->format('d-m-Y'),
                 'invoice_number' => $history->invoice_id,
-                'party' => optional($history->invoice)->party->name, // Handling relations safely
+                'party' => optional($history->invoice)->party->name,
                 'amount' => $history->amount,
-                'remark' => 'Received installment from customer' // Identifying source
+                'remark' => 'Received installment from customer'
             ];
         });
 
         $invoices = $invoices->map(function ($bill) {
             return [
                 
-                'date' => $bill->created_at->format('d-m-Y'), // Formatting date
+                'date' => $bill->created_at->format('d-m-Y'),
                 'invoice_number' => $bill->bill_number,
                 'party' => $bill->party->name,
                 'amount' => $bill->online_amount,
-                'remark' => 'Received at Billing Time' // Identifying source
+                'remark' => 'Received at Billing Time'
             ];
         });
         $mergedTransactions = collect($invoicesHistory)->merge($invoices)->sortByDesc('date')->values();

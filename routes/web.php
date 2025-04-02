@@ -54,5 +54,5 @@ Route::middleware( ['auth'])->group(callback: function () {
     Route::post('get-payment-history',[PartyController::class,'getPaymentHistory'])->name('parties.payment-history');
 
     Route::get('online-payment', [DashboardController::class, 'onlinePayment'])->name('online-payment.index');
-    Route::get('/payments/export', [DashboardController::class, 'exportPayments'])->name('payments.export');
+    Route::post('/payments/export', [DashboardController::class, 'exportPayments'])->name('payments.export');
 });
