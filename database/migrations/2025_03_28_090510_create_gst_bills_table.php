@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bills', function (Blueprint $table) {
+        Schema::create('gst_bills', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('bill_number');
+            $table->string('bill_number');
             $table->unsignedBigInteger('party_id');
             $table->unsignedBigInteger('guarantor_id')->nullable();
             $table->string('party_name');
@@ -59,6 +59,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bills');
+        Schema::dropIfExists('gst_bills');
     }
 };

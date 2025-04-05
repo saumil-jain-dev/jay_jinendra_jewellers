@@ -8,6 +8,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\GuarantorController;
 use App\Http\Controllers\BillingHistoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GstBillController;
 use App\Http\Controllers\PartyController;
 
 Route::get('/', function () {
@@ -44,7 +45,14 @@ Route::middleware( ['auth'])->group(callback: function () {
     Route::put('invoices/{invoice}/update', [InvoiceController::class, 'update'])->name('invoices.update');
     Route::get('print-invoices/{id}',[InvoiceController::class,'printInvoice'])->name('invoices.print');
 
+    Route::resource('gst-bill', GstBillController::class)->except(['update']);
+    Route::put('invoices/{invoice}/update', [GstBillController::class, 'update'])->name('gst-bill.update');
+    Route::get('print-invoices/{id}',[GstBillController::class,'printInvoice'])->name('gst-bill.print');
+
     Route::post('check-user-invoice',[InvoiceController::class,'checkUserInvoice'])->name('users.check-invoice');
     Route::post('get-invoice-details',[BillingHistoryController::class,'getUserInvoice'])->name('users.check-invoice');
     Route::post('get-payment-history',[PartyController::class,'getPaymentHistory'])->name('parties.payment-history');
+
+    Route::get('online-payment', [DashboardController::class, 'onlinePayment'])->name('online-payment.index');
+    Route::post('/payments/export', [DashboardController::class, 'exportPayments'])->name('payments.export');
 });

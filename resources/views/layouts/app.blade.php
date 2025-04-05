@@ -21,6 +21,8 @@
         <link rel="stylesheet" href="{{ asset('public/assets/js/DataTables/DataTables-1.10.18/css/dataTables.bootstrap4.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('public/assets/js/select2/css/select2.min.css') }}" />
         <link  rel="stylesheet" href="{{ asset('public/assets/css/toastr.css') }}"/>
+        
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
         <style>
             .error{
                 color: red;
@@ -38,6 +40,9 @@
         <script src="{{ asset('public/assets/js/popper/popper.js') }}"></script>
         <script src="{{ asset('public/assets/js/bootstrap/js/bootstrap.min.js') }}"></script>
         <script src="{{ asset('public/assets/js/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
+        
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
         <!--page specific scripts for demo-->
         <script src="{{ asset('public/assets/js/DataTables/datatables.min.js') }}"></script>
         <script src="{{ asset('public/assets/js/datatable-data.js') }}"></script>

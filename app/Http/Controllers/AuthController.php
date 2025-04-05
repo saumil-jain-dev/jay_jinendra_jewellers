@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bill;
+use App\Models\BillingHistory;
 use App\Models\Guarantor;
 use App\Models\Party;
 use App\Models\User;
@@ -43,8 +45,16 @@ class AuthController extends Controller
         $userCount = Party::count();
         $guarantorsCount = Guarantor::count();
         $latestUsers = Party::latest()->take(5)->get();
+        $billingTotal = Bill::whereNull('deleted_at')->sum('final_amount');
+        $cashReceptTotal = Bill::whereNull('deleted_at')->sum('cash_amount') + BillingHistory::whereNull('deleted_at')->where('payment_type','cash')->sum('amount');
+        $onlineReceptTotal = Bill::whereNull('deleted_at')->sum('online_amount') + BillingHistory::whereNull('deleted_at')->where('payment_type','online')->sum('amount');
+        $remainingTotal = Bill::whereNull('deleted_at')->sum('total_due_amount');
         $this->data['userCount'] = $userCount;
         $this->data['guarantorsCount'] = $guarantorsCount;
+        $this->data['billingTotal'] = $billingTotal;
+        $this->data['cashReceptTotal'] = $cashReceptTotal;
+        $this->data['onlineReceptTotal'] = $onlineReceptTotal;
+        $this->data['remainingTotal'] = $remainingTotal;
          return view('dashboard', $this->data);
     }
 

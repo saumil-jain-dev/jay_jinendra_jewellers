@@ -2,101 +2,114 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bill;
+
 use App\Models\BillingHistory;
+use App\Models\GstBill;
 use App\Models\Guarantor;
 use App\Models\Invoice;
 use App\Models\Party;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class InvoiceController extends Controller
+class GstBillController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     protected $data;
     public function index()
     {
-        $invoices = Bill::all();
-        $pageTitle = "Jjj | Invoice";
-        return view('invoices.index', compact('invoices','pageTitle'));
+        //
+        $invoices = GstBill::all();
+        $pageTitle = "Jjj | Gst Invoice";
+        return view('gst_invoice.index', compact('invoices','pageTitle'));
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
+        //
         $this->data['pageTitle'] = "Jjj | Invoice";
         $this->data['users'] = Party::all();
         $this->data['guarantors'] = Guarantor::all();
-        $latestBillNumber = DB::table('bills')->max('bill_number');
-        $newBillNumber = $latestBillNumber ? $latestBillNumber + 1 : 1;
-        $this->data['newBillNumber'] = $newBillNumber;
-        return view('invoices.create',$this->data);
+        
+        return view('gst_invoice.create',$this->data);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
+        //
         $data = $request->except('totalAmounts','_token','customer-name','data');
         $data['particulars'] = json_encode($request->data);
         $data['total_given_amount'] = $request->given_amount;
         $data['total_due_amount'] = $request->pending_amount;
-        $invoice = Bill::create($data);
+        $invoice = GstBill::create($data);
         session()->flash('message', 'Invoice created successfully!');
         session()->flash('alert-type', 'success');
-        return redirect()->route('invoices.index');
+        return redirect()->route('gst-bill.index');
     }
 
-    public function show(Bill $invoice)
+    /**
+     * Display the specified resource.
+     */
+    public function show(GstBill $invoice,$id)
     {
+        //
+        $invoice = GstBill::find($id);
         $pageTitle = "Jjj | Invoice";
         $invoice->load('guarantor');
-        return view('invoices.show', compact('invoice','pageTitle'));
+        return view('gst_invoice.show', compact('invoice','pageTitle'));
     }
 
-    public function edit(Bill $invoice)
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit($id)
     {
+        //
+        $invoice = GstBill::find($id);
         $this->data['pageTitle'] = "Jjj | Invoice";
         $this->data['users'] = Party::all();
         $this->data['guarantors'] = Guarantor::all();
         $this->data['guarantors'] = Guarantor::all();
         $this->data['invoice'] = $invoice;
-        return view('invoices.edit', $this->data);
+        return view('gst_invoice.edit', $this->data);
     }
 
-    public function update(Request $request, Bill $invoice)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
     {
+        //
+        $invoice = GstBill::find($id);
         $data = $request->except('totalAmounts','_token','customer-name','data');
         $data['particulars'] = json_encode($request->data);
         $data['total_given_amount'] = $request->given_amount;
         $data['total_due_amount'] = $request->pending_amount;
-        $voucherData = BillingHistory::where('invoice_id',$invoice->id)->get();
-        if(count($voucherData ) > 0 ){
-            $data = [];
-            $data['party_name'] = $request->party_name;
-            $data['party_id'] = $request->party_id;
-            $data['party_address'] = $request->party_address;
-            $data['party_gst'] = $request->party_gst;
-            $data['party_pan'] = $request->party_pan;
-            $data['bill_date'] = $request->bill_date;
-            $data['old_gold'] = $request->old_gold;
-            $data['old_silver'] = $request->old_silver;
-            $data['guarantor_id'] = $request->guarantor_id;
-            $data['remark'] = $request->remark;
-
-            session()->flash('message', 'You can not change bill item because bill voucher is created');
-            session()->flash('alert-type', 'warning');
-        }
 
         $invoice->update($data);
 
         session()->flash('message', 'Invoice updated successfully!');
         session()->flash('alert-type', 'success');
-        return redirect()->route('invoices.index');
+        return redirect()->route('gst-bill.index');
     }
 
-    public function destroy(Bill $invoice)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(GstBill $invoice)
     {
+        //
         $invoice->delete();
-        session()->flash('message', 'Invoice deleted successfully.');
+        session()->flash('message', 'Gst invoice deleted successfully.');
         session()->flash('alert-type', 'success');
-        return redirect()->route('invoices.index');
+        return redirect()->route('gst-bill.index');
     }
 
     public function checkUserInvoice(Request $request){
@@ -107,7 +120,7 @@ class InvoiceController extends Controller
                 'message' => 'Customer not found',
             ], 404);
         }
-        $billData = Bill::where('party_id', $user->id)->orderBy('id', 'desc')->first();
+        $billData = GstBill::where('party_id', $user->id)->orderBy('id', 'desc')->first();
 
         $response = [
             'customer_id' => $user->id,
